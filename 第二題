@@ -1,0 +1,24 @@
+def matrix_inverse(A):
+    n = A.shape[0]
+    inverse = np.zeros((n, n))
+    I = np.eye(n)
+    
+    for i in range(n):
+        # Solve for each column of the inverse
+        b = I[:, i]
+        # Using Gaussian elimination with pivoting from Problem 1
+        column = gaussian_elimination_with_pivoting(A.copy(), b.copy())
+        inverse[:, i] = column
+    
+    return inverse
+
+A = np.array([
+    [4, 1, -1, 0],
+    [1, 3, -1, 0],
+    [-1, -1, 6, 2],
+    [0, 0, 2, 5]
+], dtype=float)
+
+A_inv = matrix_inverse(A)
+print("Inverse of matrix A:")
+print(A_inv)
