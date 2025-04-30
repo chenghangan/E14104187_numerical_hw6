@@ -1,0 +1,46 @@
+def crout_tridiagonal(a, b, c, d):
+    """
+    Solves a tridiagonal system Ax = d where:
+    a: subdiagonal (length n-1)
+    b: main diagonal (length n)
+    c: superdiagonal (length n-1)
+    d: right-hand side (length n)
+    """
+    n = len(d)
+    
+    # Initialize L and U
+    l = np.zeros(n)
+    u = np.zeros(n-1)
+    y = np.zeros(n)
+    x = np.zeros(n)
+    
+    # Crout factorization
+    l[0] = b[0]
+    for i in range(1, n):
+        u[i-1] = c[i-1] / l[i-1]
+        l[i] = b[i] - a[i-1] * u[i-1]
+    
+    # Forward substitution (Ly = d)
+    y[0] = d[0] / l[0]
+    for i in range(1, n):
+        y[i] = (d[i] - a[i-1] * y[i-1]) / l[i]
+    
+    # Backward substitution (Ux = y)
+    x[-1] = y[-1]
+    for i in range(n-2, -1, -1):
+        x[i] = y[i] - u[i] * x[i+1]
+    
+    return x
+
+# Define the tridiagonal system
+a = np.array([-1, -1, -1])  # subdiagonal
+b = np.array([3, 3, 3, 3])  # main diagonal
+c = np.array([-1, -1, -1])  # superdiagonal
+d = np.array([2, 3, 4, 1])   # right-hand side
+
+solution = crout_tridiagonal(a, b, c, d)
+print("Solution:")
+print(f"x₁ = {solution[0]:.6f}")
+print(f"x₂ = {solution[1]:.6f}")
+print(f"x₃ = {solution[2]:.6f}")
+print(f"x₄ = {solution[3]:.6f}")
